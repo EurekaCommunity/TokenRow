@@ -1,0 +1,30 @@
+PODS:
+  - Alamofire (3.5.0)
+  - AlamofireImage (2.5.0):
+    - Alamofire (~> 3.5)
+  - CLTokenInputView (2.3.0)
+  - Eureka (1.7.0)
+  - TokenRow (1.0.0):
+    - CLTokenInputView (~> 2.0)
+    - Eureka (~> 1.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.5)
+  - AlamofireImage
+  - CLTokenInputView
+  - TokenRow (from `../../`)
+
+EXTERNAL SOURCES:
+  TokenRow:
+    :path: ../../
+
+SPEC CHECKSUMS:
+  Alamofire: b70a7352335f8ea5babd0a923eb7e8eacc67b877
+  AlamofireImage: 2d34936e5201270bb17a316a786e90e83b4a249d
+  CLTokenInputView: 9dc1ffb7c9d2d81787e69a63c75bd97b0b2d1e76
+  Eureka: 2020d9faeef7b7e9adeb9e3d8af779e5931c1897
+  TokenRow: c509a85ee6472209d9ad4756f45d01a3f7e2b22b
+
+PODFILE CHECKSUM: 46da28a7d43e28afa3c5ffeac213dc79b5a1b7d7
+
+COCOAPODS: 1.0.0
