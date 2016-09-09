@@ -2,10 +2,17 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 use_frameworks!
 
-target 'Example' do
+def pods
 	pod 'Alamofire', '~> 3.5'
     pod 'AlamofireImage'
-    pod 'CLTokenInputView'
+    pod 'CLTokenInputView', '~> 2.0'
 	pod 'TokenRow', :path => '../../'
 end
 
+target 'Example' do
+    pods
+end
+
+target 'TokenRowTests' do
+    pods
+end

@@ -13,7 +13,7 @@ import CLTokenInputView
  *  Protocol that the UICollectionViewCells that show options in a TokenRow have to conform to
  */
 public protocol EurekaTokenCollectionViewCell {
-    typealias T: TokenSearchable
+    associatedtype T: TokenSearchable
 
     func setupForToken(token: T)
     func sizeThatFits() -> CGSize

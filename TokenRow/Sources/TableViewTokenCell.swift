@@ -14,7 +14,7 @@ import CLTokenInputView
  *  Protocol that the UITableViewCells that show options in a TokenRow have to conform to
  */
 public protocol EurekaTokenTableViewCell {
-    typealias T: TokenSearchable
+    associatedtype T: TokenSearchable
 
     func setupForToken(token: T)
 }

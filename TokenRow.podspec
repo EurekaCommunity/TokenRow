@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "TokenRow"
   s.version          = "1.0.0"
-  s.summary          = "A row that allows the user to select options into a token view."
+  s.summary          = "An Eureka row that allows the user to select options into a token view."
   s.homepage         = "https://github.com/EurekaCommunity/TokenRow"
   s.license          = { type: 'MIT', file: 'LICENSE' }
   s.author           = { "Xmartlabs SRL" => "swift@xmartlabs.com" }
