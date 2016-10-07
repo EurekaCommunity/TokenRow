@@ -20,7 +20,7 @@ public protocol TokenSearchable: Hashable {
 }
 
 /// Generic TokenRow. Concrete classes should subclass this one and specify generic parameters
-public class _TokenRow<T: TokenSearchable, Cell: BaseCell where Cell: CellType, Cell: TokenCellProtocol, Cell: TypedCellType, Cell.Value == Set<T>> : Row<Set<T>, Cell> {
+open class _TokenRow<T: TokenSearchable, Cell: BaseCell> : Row<Cell> where Cell: CellType, Cell: TokenCellProtocol, Cell: TypedCellType, Cell.Value == Set<T> {
     public var options: [T] = []
     public var placeholder: String?
 
@@ -31,41 +31,41 @@ public class _TokenRow<T: TokenSearchable, Cell: BaseCell where Cell: CellType, 
     }
     
     /// Get tokens that match a given search text. Useful when you want to get those tokens asynchronously
-    public lazy var getTokensForString: (String) -> [T]? = { [weak self] searchString in
+    open lazy var getTokensForString: (String) -> [T]? = { [weak self] searchString in
         guard let me = self else { return nil }
 
         // return options that have not been chosen and that contain the searchString
         return me.options.filter {
                 return me.value == nil || !me.value!.contains($0)
-            }.filter { $0.contains(searchString) }
+            }.filter { $0.contains(token: searchString) }
     }
 
     /// remove a token by its identifier
-    public func removeToken(tokenIdentifier: NSObject) {
+    open func removeToken(_ tokenIdentifier: NSObject) {
         if let token = value?.filter({ $0.identifier == tokenIdentifier }).first {
             removeToken(token)
         }
     }
 
     /// remove a token from the list of chosen tokens
-    public func removeToken(token: T) {
+    open func removeToken(_ token: T) {
         value?.remove(token)
         if let cltoken = cell.tokenView.allTokens.filter({ $0.context == token.identifier }).first {
-            cell.tokenView.removeToken(cltoken)
+            cell.tokenView.remove(cltoken)
         }
     }
 
     /// add a token to the list of chosen tokens by identifier
-    public func addToken(tokenIdentifier: NSObject) {
+    open func addToken(_ tokenIdentifier: NSObject) {
         if let token = options.filter({$0.identifier == tokenIdentifier}).first {
             addToken(token)
         }
     }
 
     /// add a token from the list of chosen tokens
-    public func addToken(token: T) {
+    open func addToken(_ token: T) {
         value?.insert(token)
-        cell.tokenView.addToken(CLToken(displayText: token.displayString, context: token.identifier))
+        cell.tokenView.add(CLToken(displayText: token.displayString, context: token.identifier))
     }
 }
 
@@ -89,8 +89,8 @@ public final class TokenTableRow<T: TokenSearchable>: _TokenRow<T, TableTokenCel
  */
 protocol TokenRowProtocol {
     var placeholder: String? { get }
-    func addToken(tokenIdentifier: NSObject)
-    func removeToken(tokenIdentifier: NSObject)
+    func addToken(_ tokenIdentifier: NSObject)
+    func removeToken(_ tokenIdentifier: NSObject)
 }
 
 extension _TokenRow: TokenRowProtocol {}

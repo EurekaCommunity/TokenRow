@@ -19,10 +19,10 @@ final class User: ResponseObjectSerializable, ResponseCollectionSerializable {
         return id
     }
 
-    required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.name = representation.valueForKeyPath("login") as! String
-        self.avatar = representation.valueForKeyPath("avatar_url") as? String
-        self.id = representation.valueForKeyPath("id") as! Int
+    required init?(response: HTTPURLResponse, representation: AnyObject) {
+        self.name = representation.value(forKeyPath: "login") as! String
+        self.avatar = representation.value(forKeyPath: "avatar_url") as? String
+        self.id = representation.value(forKeyPath: "id") as! Int
     }
 }
 
@@ -36,7 +36,7 @@ extension User: TokenSearchable {
     }
 
     var identifier: NSObject {
-        return id
+        return id as NSObject
     }
 
     var displayString: String {

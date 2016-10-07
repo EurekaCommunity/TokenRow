@@ -14,7 +14,7 @@ import AlamofireImage
 
 class ViewController: FormViewController {
 
-    var timer: NSTimer?
+    var timer: Timer?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,11 +34,11 @@ class ViewController: FormViewController {
                 $0.title = "A title:"
                 $0.options = ["Peter Schmeichel", "David de Gea", "Oliver Kahn", "Fabien Barthez", "Tim Howard", "Gianluigi Buffon"]
             }.cellSetup({ (cell, row) in
-                (cell.collectionViewLayout  as? UICollectionViewFlowLayout)?.sectionInset = UIEdgeInsetsZero
+                (cell.collectionViewLayout  as? UICollectionViewFlowLayout)?.sectionInset = .zero
                 (cell.collectionViewLayout  as? UICollectionViewFlowLayout)?.minimumInteritemSpacing = 40
                 cell.customizeCollectionViewCell = { _, cvcell in
-                    cvcell.label.textColor = UIColor.redColor()
-                    cvcell.layer.borderColor = UIColor.redColor().CGColor
+                    cvcell.label.textColor = UIColor.red
+                    cvcell.layer.borderColor = UIColor.red.cgColor
                     cvcell.layer.borderWidth = 1
                     cvcell.layer.cornerRadius = 4
                 }
@@ -53,14 +53,14 @@ class ViewController: FormViewController {
                     if me.timer != nil {
                         me.invalidateTimer()
                     }
-                    me.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: me, selector: #selector(ViewController.timerFired(_:)), userInfo: ["text": string, "row": row], repeats: false)
+                    me.timer = Timer.scheduledTimer(timeInterval: 0.5, target: me, selector: #selector(ViewController.timerFired(_:)), userInfo: ["text": string, "row": row], repeats: false)
 
                     return []
                 }
         }.cellSetup({ (cell, row) in
             cell.customizeTableViewCell = { (user: User, cell: TRTableViewCell<User>) -> Void in
-                if let avatar = user.avatar, let url = NSURL(string: avatar) {
-                    cell.imageView?.af_setImageWithURL(url, placeholderImage: UIImage(named: "profile_empty"))
+                if let avatar = user.avatar, let url = URL(string: avatar) {
+                    cell.imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "profile_empty"))
                 }
             }
         })
@@ -71,18 +71,18 @@ class ViewController: FormViewController {
         timer = nil
     }
 
-    func timerFired(timer: NSTimer) {
+    func timerFired(_ timer: Timer) {
         if let dict = (timer.userInfo as? Dictionary<String, AnyObject>),
             let text = dict["text"] as? String,
             let row = dict["row"] as? TokenTableRow<User> {
 
-            Alamofire.Manager.sharedInstance.request(.GET, "https://api.github.com/search/users?q=\(text)&per_page=5")
-                .responseCollection({ (response: Response<[User], BackendError>) in
+            Alamofire.SessionManager.default.request("https://api.github.com/search/users?q=\(text)&per_page=5")
+                .responseCollection(completionHandler: { (response: DataResponse<[User]>) in
                     switch response.result {
-                    case let .Success(value):
+                    case let .success(value):
                         row.cell.filteredTokens = value
                         row.cell.reloadOptions()
-                    case let .Failure(error):
+                    case let .failure(error):
                         print(error)
                     }
                 })

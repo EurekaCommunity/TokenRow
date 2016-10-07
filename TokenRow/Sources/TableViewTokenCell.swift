@@ -16,11 +16,11 @@ import CLTokenInputView
 public protocol EurekaTokenTableViewCell {
     associatedtype T: TokenSearchable
 
-    func setupForToken(token: T)
+    func setupForToken(_ token: T)
 }
 
 /// Cell that is used in a TokenTableRow. shows a UITableView with options. Generic parameters are: Value of Row and Type of the Cell to be shown in the UITableView that shows the options
-public class TableTokenCell<T: TokenSearchable, TableViewCell: UITableViewCell where TableViewCell: EurekaTokenTableViewCell, TableViewCell.T == T>: TokenCell<T>, UITableViewDelegate, UITableViewDataSource {
+open class TableTokenCell<T: TokenSearchable, TableViewCell: UITableViewCell>: TokenCell<T>, UITableViewDelegate, UITableViewDataSource where TableViewCell: EurekaTokenTableViewCell, TableViewCell.T == T {
 
     /// callback that can be used to cuustomize the appearance of the UICollectionViewCell in the inputAccessoryView
     public var customizeTableViewCell: ((T, TableViewCell) -> Void)?
@@ -35,38 +35,42 @@ public class TableTokenCell<T: TokenSearchable, TableViewCell: UITableViewCell w
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
 
-    public override func setup() {
-        super.setup()
-        tableView = UITableView(frame: CGRectZero, style: .Plain)
-        tableView?.autoresizingMask = .FlexibleHeight
-        tableView?.hidden = true
-        tableView?.delegate = self
-        tableView?.dataSource = self
-        tableView?.backgroundColor = UIColor.whiteColor()
-        tableView?.registerClass(TableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    public override func showOptions() {
+    open override func setup() {
+        super.setup()
+        tableView = UITableView(frame: CGRect.zero, style: .plain)
+        tableView?.autoresizingMask = .flexibleHeight
+        tableView?.isHidden = true
+        tableView?.delegate = self
+        tableView?.dataSource = self
+        tableView?.backgroundColor = UIColor.white
+        tableView?.register(TableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+    }
+
+    open override func showOptions() {
         if let controller = formViewController() {
             if tableView?.superview == nil {
                 controller.view.addSubview(tableView!)
             }
-            let frame = controller.tableView?.convertRect(self.frame, toView: controller.view) ?? self.frame
-            tableView?.frame = CGRectMake(0, frame.origin.y + frame.height, contentView.frame.width, 44 * CGFloat(numberOfOptions))
-            tableView?.hidden = false
+            let frame = controller.tableView?.convert(self.frame, to: controller.view) ?? self.frame
+            tableView?.frame = CGRect(x: 0, y: frame.origin.y + frame.height, width: contentView.frame.width, height: 44 * CGFloat(numberOfOptions))
+            tableView?.isHidden = false
         }
     }
 
-    override public func hideOptions() {
-        tableView?.hidden = true
+    override open func hideOptions() {
+        tableView?.isHidden = true
     }
 
-    override public func reloadOptions() {
+    override open func reloadOptions() {
         tableView?.reloadData()
     }
 
-    public func tokenInputView(aView: CLTokenInputView, didChangeText text: String?) {
-        if let text = text where !text.isEmpty {
+    open func tokenInputView(_ aView: CLTokenInputView, didChangeText text: String?) {
+        if let text = text , !text.isEmpty {
             if let newTokens = (row as! _TokenRow<T, TableTokenCell<T, TableViewCell>>).getTokensForString(text) {
                 filteredTokens = newTokens
             }
@@ -80,29 +84,29 @@ public class TableTokenCell<T: TokenSearchable, TableViewCell: UITableViewCell w
     }
 
     //MARK: UITableViewDelegate and Datasource
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredTokens.count
     }
 
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! TableViewCell
-        if filteredTokens.count > indexPath.row {
-            let token = filteredTokens[indexPath.row]
+    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! TableViewCell
+        if filteredTokens.count > (indexPath as NSIndexPath).row {
+            let token = filteredTokens[(indexPath as NSIndexPath).row]
             cell.setupForToken(token)
             customizeTableViewCell?(token, cell)
         }
         return cell
     }
 
-    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if filteredTokens.count > indexPath.row {
-            let token = filteredTokens[indexPath.row]
+    open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if filteredTokens.count > (indexPath as NSIndexPath).row {
+            let token = filteredTokens[(indexPath as NSIndexPath).row]
             (row as! _TokenRow<T, TableTokenCell>).addToken(token)
             cellResignFirstResponder()
         }
     }
 
-    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    open func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 }

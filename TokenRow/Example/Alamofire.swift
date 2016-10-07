@@ -16,57 +16,58 @@ import Alamofire
 */
 
 
-public enum BackendError: ErrorType {
-    case Network(error: NSError)
-    case DataSerialization(reason: String)
-    case JSONSerialization(error: NSError)
-    case ObjectSerialization(reason: String)
-    case XMLSerialization(error: NSError)
+public enum BackendError: Error {
+    case network(error: NSError)
+    case dataSerialization(reason: String)
+    case jsonSerialization(error: NSError)
+    case objectSerialization(reason: String)
+    case xmlSerialization(error: NSError)
 }
 
 public protocol ResponseObjectSerializable {
-    init?(response: NSHTTPURLResponse, representation: AnyObject)
+    init?(response: HTTPURLResponse, representation: AnyObject)
 }
 
-extension Request {
-    public func responseObject<T: ResponseObjectSerializable>(completionHandler: Response<T, BackendError> -> Void) -> Self {
-        let responseSerializer = ResponseSerializer<T, BackendError> { request, response, data, error in
-            guard error == nil else { return .Failure(.Network(error: error!)) }
+extension DataRequest {
+    @discardableResult
+    public func responseObject<T: ResponseObjectSerializable>(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
+        let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
+            guard error == nil else { return .failure(BackendError.network(error: error! as NSError)) }
 
-            let JSONResponseSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+            let JSONResponseSerializer = DataRequest.jsonResponseSerializer(options: .allowFragments)
             let result = JSONResponseSerializer.serializeResponse(request, response, data, error)
 
             switch result {
-            case .Success(let value):
+            case .success(let value):
                 if let
                     response = response,
-                    responseObject = T(response: response, representation: value)
+                    let responseObject = T(response: response, representation: value as AnyObject)
                 {
-                    return .Success(responseObject)
+                    return .success(responseObject)
                 } else {
-                    return .Failure(.ObjectSerialization(reason: "JSON could not be serialized into response object: \(value)"))
+                    return .failure(BackendError.objectSerialization(reason: "JSON could not be serialized into response object: \(value)"))
                 }
-            case .Failure(let error):
-                return .Failure(.JSONSerialization(error: error))
+            case .failure(let error):
+                return .failure(BackendError.jsonSerialization(error: error as NSError))
             }
         }
 
-        return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
+        return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
     }
 }
 
 public protocol ResponseCollectionSerializable {
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Self]
+    static func collection(response: HTTPURLResponse, representation: AnyObject) -> [Self]
 }
 
 extension ResponseCollectionSerializable where Self: ResponseObjectSerializable {
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Self] {
+    static func collection(response: HTTPURLResponse, representation: AnyObject) -> [Self] {
         var collection = [Self]()
 
         // check in items path
-        if let representation = representation.valueForKeyPath("items") as? [[String: AnyObject]] {
+        if let representation = representation.value(forKeyPath: "items") as? [[String: AnyObject]] {
             for itemRepresentation in representation {
-                if let item = Self(response: response, representation: itemRepresentation) {
+                if let item = Self(response: response, representation: itemRepresentation as AnyObject) {
                     collection.append(item)
                 }
             }
@@ -76,26 +77,28 @@ extension ResponseCollectionSerializable where Self: ResponseObjectSerializable 
     }
 }
 
-extension Alamofire.Request {
-    public func responseCollection<T: ResponseCollectionSerializable>(completionHandler: Response<[T], BackendError> -> Void) -> Self {
-        let responseSerializer = ResponseSerializer<[T], BackendError> { request, response, data, error in
-            guard error == nil else { return .Failure(.Network(error: error!)) }
+extension DataRequest {
+    @discardableResult
+    public func responseCollection<T: ResponseCollectionSerializable>(queue: DispatchQueue? = nil,
+                                   completionHandler: @escaping (DataResponse<[T]>) -> Void) -> Self {
+        let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
+            guard error == nil else { return .failure(BackendError.network(error: error! as NSError)) }
 
-            let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let result = JSONSerializer.serializeResponse(request, response, data, error)
+            let JSONResponseSerializer = DataRequest.jsonResponseSerializer(options: .allowFragments)
+            let result = JSONResponseSerializer.serializeResponse(request, response, data, error)
 
             switch result {
-            case .Success(let value):
+            case .success(let value):
                 if let response = response {
-                    return .Success(T.collection(response: response, representation: value))
+                    return .success(T.collection(response: response, representation: value as AnyObject))
                 } else {
-                    return .Failure(. ObjectSerialization(reason: "Response collection could not be serialized due to nil response"))
+                    return .failure(BackendError.objectSerialization(reason: "JSON could not be serialized into response object: \(value)"))
                 }
-            case .Failure(let error):
-                return .Failure(.JSONSerialization(error: error))
+            case .failure(let error):
+                return .failure(BackendError.jsonSerialization(error: error as NSError))
             }
         }
 
-        return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
+        return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
     }
 }

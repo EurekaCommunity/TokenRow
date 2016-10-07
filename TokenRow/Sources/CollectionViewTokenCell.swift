@@ -15,32 +15,32 @@ import CLTokenInputView
 public protocol EurekaTokenCollectionViewCell {
     associatedtype T: TokenSearchable
 
-    func setupForToken(token: T)
+    func setupForToken(_ token: T)
     func sizeThatFits() -> CGSize
 }
 
 /**
     Cell that is used in a TokenTableRow. shows a UITableView with options. Generic parameters are: Value of Row and Type of the Cell to be shown in the UITableView that shows the options
  */
-public class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UICollectionViewCell where CollectionViewCell: EurekaTokenCollectionViewCell, CollectionViewCell.T == T>: TokenCell<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+open class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UICollectionViewCell>: TokenCell<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CollectionViewCell: EurekaTokenCollectionViewCell, CollectionViewCell.T == T {
 
     /// callback that can be used to cuustomize the appearance of the UICollectionViewCell in the inputAccessoryView
     public var customizeCollectionViewCell: ((T, CollectionViewCell) -> Void)?
 
     /// UICollectionView that acts as inputAccessoryView.
     public lazy var collectionView: UICollectionView? = {
-        let collectionView = UICollectionView(frame: CGRectMake(0, 0, self.contentView.frame.width, 50), collectionViewLayout: self.collectionViewLayout)
+        let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 50), collectionViewLayout: self.collectionViewLayout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.whiteColor()
-        collectionView.registerClass(CollectionViewCell.self, forCellWithReuseIdentifier: self.cellReuseIdentifier)
+        collectionView.backgroundColor = UIColor.white
+        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: self.cellReuseIdentifier)
         return collectionView
     }()
 
     public var collectionViewLayout: UICollectionViewLayout = {
         var layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5)
@@ -51,16 +51,20 @@ public class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UIColle
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
 
-    public override var inputAccessoryView: UIView? {
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    open override var inputAccessoryView: UIView? {
         return self.collectionView
     }
 
-    override public func reloadOptions() {
+    override open func reloadOptions() {
         collectionView?.reloadData()
     }
 
-    public func tokenInputView(aView: CLTokenInputView, didChangeText text: String?) {
-        if let text = text where !text.isEmpty {
+    open func tokenInputView(_ aView: CLTokenInputView, didChangeText text: String?) {
+        if let text = text , !text.isEmpty {
             if let newTokens = (row as! _TokenRow<T, CollectionTokenCell<T, CollectionViewCell>>).getTokensForString(text) {
                 filteredTokens = newTokens
             }
@@ -74,38 +78,38 @@ public class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UIColle
     }
 
     //MARK: UICollectionViewDelegate and Datasource
-    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredTokens.count
     }
 
-    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! CollectionViewCell
-        if filteredTokens.count > indexPath.row {
-            let token = filteredTokens[indexPath.row]
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as! CollectionViewCell
+        if filteredTokens.count > (indexPath as NSIndexPath).row {
+            let token = filteredTokens[(indexPath as NSIndexPath).row]
             cell.setupForToken(token)
             customizeCollectionViewCell?(token, cell)
         }
         return cell
     }
 
-    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if filteredTokens.count > indexPath.row {
-            let token = filteredTokens[indexPath.row]
+    open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if filteredTokens.count > (indexPath as NSIndexPath).row {
+            let token = filteredTokens[(indexPath as NSIndexPath).row]
             (row as! _TokenRow<T, CollectionTokenCell>).addToken(token)
             cellResignFirstResponder()
         }
     }
 
-    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let cell = CollectionViewCell(frame: CGRectZero)
-        if filteredTokens.count > indexPath.row {
-            let token = filteredTokens[indexPath.row]
+    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cell = CollectionViewCell(frame: CGRect.zero)
+        if filteredTokens.count > (indexPath as NSIndexPath).row {
+            let token = filteredTokens[(indexPath as NSIndexPath).row]
             cell.setupForToken(token)
         }
         return cell.sizeThatFits()
     }
 
-    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    open func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 }

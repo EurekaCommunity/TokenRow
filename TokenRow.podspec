@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "TokenRow"
-  s.version          = "1.0.0"
+  s.version          = "1.1.0"
   s.summary          = "An Eureka row that allows the user to select options into a token view."
   s.homepage         = "https://github.com/EurekaCommunity/TokenRow"
   s.license          = { type: 'MIT', file: 'LICENSE' }
@@ -11,6 +11,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.source_files = 'TokenRow/Sources/**/*.{swift}'
   s.ios.frameworks = 'UIKit', 'Foundation'
-  s.dependency 'Eureka', '~> 1.0'
+  s.dependency 'Eureka', '~> 2.0.0-beta.1'
   s.dependency 'CLTokenInputView', '~> 2.0'
 end

@@ -45,9 +45,9 @@ class TokenRowTests: XCTestCase {
     func testStringSearchable() {
         let string = "SoMe VeRy RarE StrINg"
 
-        XCTAssertTrue(string.contains("very"))
-        XCTAssertTrue(string.contains("STRING"))
-        XCTAssertFalse(string.contains("strange"))
+        XCTAssertTrue(string.contains(token: "very"))
+        XCTAssertTrue(string.contains(token: "STRING"))
+        XCTAssertFalse(string.contains(token: "strange"))
     }
     
 }

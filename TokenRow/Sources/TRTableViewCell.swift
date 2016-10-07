@@ -10,7 +10,7 @@ import Foundation
 import Eureka
 
 /// Default cell for the table of the TokenTableCell
-public class TRTableViewCell<Token: TokenSearchable>: UITableViewCell, EurekaTokenTableViewCell {
+open class TRTableViewCell<Token: TokenSearchable>: UITableViewCell, EurekaTokenTableViewCell {
     public typealias T = Token
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -24,14 +24,14 @@ public class TRTableViewCell<Token: TokenSearchable>: UITableViewCell, EurekaTok
     }
     
     func initialize() {
-        textLabel?.font = UIFont.systemFontOfSize(16)
+        textLabel?.font = UIFont.systemFont(ofSize: 16)
         textLabel?.minimumScaleFactor = 0.8
         textLabel?.adjustsFontSizeToFitWidth = true
-        textLabel?.textColor = UIColor.blueColor()
-        contentView.backgroundColor = UIColor.whiteColor()
+        textLabel?.textColor = UIColor.blue
+        contentView.backgroundColor = UIColor.white
     }
     
-    public func setupForToken(token: T) {
+    open func setupForToken(_ token: T) {
         textLabel?.text = token.displayString
     }
 }

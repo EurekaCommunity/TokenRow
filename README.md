@@ -3,7 +3,7 @@
 <p align="left">
 <a href="https://travis-ci.org/EurekaCommunity/TokenRow"><img src="https://travis-ci.org/EurekaCommunity/TokenRow.svg?branch=master" alt="Build status" /></a>
 <img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift2-compatible-4BC51D.svg?style=flat" alt="Swift 2 compatible" /></a>
+<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift3-compatible-4BC51D.svg?style=flat" alt="Swift 2 compatible" /></a>
 <!--<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible" /></a>-->
 <a href="https://cocoapods.org/pods/XLActionController"><img src="https://img.shields.io/cocoapods/v/TokenRow.svg" alt="CocoaPods compatible" /></a>
 <a href="https://raw.githubusercontent.com/EurekaCommunity/TokenRow/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
@@ -54,13 +54,13 @@ form +++ Section()
 To see what you can customize have a look at the [Customization](#customization) section.
 
 ## Dependencies
-* [Eureka] 
+* [Eureka] 2.x
 * [CLTokenInputView] which is a token view pod 
 
 ## Requirements
 
 * iOS 8.0+
-* Xcode 7.3+
+* Xcode 8+
 
 ## Getting involved
 
@@ -91,17 +91,6 @@ To install TokenRow, simply add the following line to your Podfile:
 ```ruby
 pod 'TokenRow'
 ```
-<!--
-#### Carthage
-
-[Carthage](https://github.com/Carthage/Carthage) is a simple, decentralized dependency manager for Cocoa.
-
-To install TokenRow, simply add the following line to your Cartfile:
-
-```ogdl
-github "EurekaCommunity/TokenRow"
-```
--->
 
 ## TokenSearchable
 
@@ -175,17 +164,16 @@ For example:
 ```swift
 row.getTokensForString = { [weak self, row] string in
         guard let me = self else { return nil }
-        Alamofire.Manager.sharedInstance.request(.GET, "https://api.github.com/search/users?q=\(string)&per_page=5")
-            .responseCollection({ (response: Response<[User], BackendError>) in
-                switch response.result {
-                case let .Success(value):
-                	 // update the filtered tokens and reload the tableView or collectionView
-                    row.cell.filteredTokens = value
-                    row.cell.reloadOptions()
-                case let .Failure(error):
-                    print(error)
-                }
-            })
+        Alamofire.SessionManager.default.request("https://api.github.com/search/users?q=\(text)&per_page=5")
+                .responseCollection(completionHandler: { (response: DataResponse<[User]>) in
+                    switch response.result {
+                    case let .success(value):
+                        row.cell.filteredTokens = value
+                        row.cell.reloadOptions()
+                    case let .failure(error):
+                        print(error)
+                    }
+                })
         return []
     }
 ```

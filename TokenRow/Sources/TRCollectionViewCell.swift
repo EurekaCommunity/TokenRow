@@ -10,7 +10,7 @@ import Foundation
 import Eureka
 
 /// Default cell for the inputAccessoryView of the TokenAccessoryRow
-public class TRCollectionViewCell<Token: TokenSearchable>: UICollectionViewCell, EurekaTokenCollectionViewCell {
+open class TRCollectionViewCell<Token: TokenSearchable>: UICollectionViewCell, EurekaTokenCollectionViewCell {
     public typealias T = Token
 
     public var label = UILabel()
@@ -26,25 +26,25 @@ public class TRCollectionViewCell<Token: TokenSearchable>: UICollectionViewCell,
     }
     
     func initialize() {
-        label.font = UIFont.systemFontOfSize(13)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.numberOfLines = 2
         label.minimumScaleFactor = 0.8
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = UIColor.blueColor()
+        label.textColor = UIColor.blue
         contentView.addSubview(label)
-        contentView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(4)-[label]-(4)-|", options: [], metrics: nil, views: ["label": label]))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[label]|", options: [], metrics: nil, views: ["label": label]))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(4)-[label]-(4)-|", options: [], metrics: nil, views: ["label": label]))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label]|", options: [], metrics: nil, views: ["label": label]))
     }
     
-    public func setupForToken(token: T) {
+    open func setupForToken(_ token: T) {
         label.text = token.displayString
     }
     
-    public func sizeThatFits() -> CGSize {
-        label.frame = CGRectMake(0, 0, 180, 40)
+    open func sizeThatFits() -> CGSize {
+        label.frame = CGRect(x: 0, y: 0, width: 180, height: 40)
         label.sizeToFit()
-        return CGSizeMake(label.frame.width + 8, 40)
+        return CGSize(width: label.frame.width + 8, height: 40)
     }
 }

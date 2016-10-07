@@ -15,7 +15,7 @@ public protocol TokenCellProtocol {
     var tokenView: CLTokenInputView { get }
 }
 
-public class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate, TokenCellProtocol, CellType {
+open class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate, TokenCellProtocol, CellType {
 
     /// View that contains the tokens of this row
     lazy public var tokenView: CLTokenInputView = { [weak self] in
@@ -36,20 +36,24 @@ public class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelega
     required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 
-    public override func cellCanBecomeFirstResponder() -> Bool {
+    open override func cellCanBecomeFirstResponder() -> Bool {
         return !row.isDisabled
     }
 
-    public override func canBecomeFirstResponder() -> Bool {
-        return tokenView.canBecomeFirstResponder()
+    open override var canBecomeFirstResponder: Bool {
+        return tokenView.canBecomeFirstResponder
     }
 
-    public override func becomeFirstResponder() -> Bool {
+    open override func becomeFirstResponder() -> Bool {
         return tokenView.becomeFirstResponder()
     }
 
-    public override func cellResignFirstResponder() -> Bool {
+    open override func cellResignFirstResponder() -> Bool {
         hideOptions()
         return tokenView.resignFirstResponder()
     }
@@ -58,15 +62,15 @@ public class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelega
         return row as! TokenRowProtocol
     }
 
-    public override func setup() {
+    open override func setup() {
         super.setup()
         contentView.addSubview(tokenView)
         setupConstraints()
-        selectionStyle = .None
-        tokenView.backgroundColor = .clearColor()
+        selectionStyle = .none
+        tokenView.backgroundColor = .clear
     }
 
-    public override func update() {
+    open override func update() {
         // Not calling super on purpose as we do not want to use textlabel nor detailTextLabel
         tokenView.fieldName = row.title
         tokenView.placeholderText = tokenRow.placeholder
@@ -75,10 +79,10 @@ public class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelega
     /**
      Constrinats for this cell should be set up here. Custom constraints should be added here in an override
      */
-    public func setupConstraints() {
+    open func setupConstraints() {
         let views = ["tokenView": tokenView]
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[tokenView]|", options: .AlignAllBaseline, metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[tokenView]|", options: .AlignAllBaseline, metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[tokenView]|", options: .alignAllLastBaseline, metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[tokenView]|", options: .alignAllLastBaseline, metrics: nil, views: views))
     }
 
     /// Should show the list of options
@@ -88,17 +92,17 @@ public class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelega
     func hideOptions() {}
 
     /// Should reload the list of options
-    public func reloadOptions() {}
+    open func reloadOptions() {}
 
-    public func tokenInputView(aView:CLTokenInputView, didAddToken token:CLToken) {
+    open func tokenInputView(_ aView:CLTokenInputView, didAdd token:CLToken) {
         tokenRow.addToken(token.context!)
     }
 
-    public func tokenInputView(aView:CLTokenInputView, didRemoveToken token:CLToken) {
+    open func tokenInputView(_ aView:CLTokenInputView, didRemove token:CLToken) {
         tokenRow.removeToken(token.context!)
     }
 
-    public func tokenInputView(aView: CLTokenInputView, tokenForText text: String) -> CLToken? {
+    open func tokenInputView(_ aView: CLTokenInputView, tokenForText text: String) -> CLToken? {
         if filteredTokens.count > 0 {
             let matchingToken = filteredTokens[0]
             let match = CLToken()
@@ -109,16 +113,16 @@ public class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelega
         return nil
     }
 
-    public func tokenInputViewDidBeginEditing(view: CLTokenInputView) {
-        formViewController()?.beginEditing(self)
+    open func tokenInputViewDidBeginEditing(_ view: CLTokenInputView) {
+        formViewController()?.beginEditing(of: self)
     }
 
-    public func tokenInputViewDidEndEditing(view: CLTokenInputView) {
-        formViewController()?.endEditing(self)
+    open func tokenInputViewDidEndEditing(_ view: CLTokenInputView) {
+        formViewController()?.endEditing(of: self)
         hideOptions()
     }
 
-    public func tokenInputView(view: CLTokenInputView, didChangeHeightTo height: CGFloat) {
+    open func tokenInputView(_ view: CLTokenInputView, didChangeHeightTo height: CGFloat) {
         self.height = { height }
         formViewController()?.tableView?.beginUpdates()
         formViewController()?.tableView?.endUpdates()
