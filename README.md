@@ -55,12 +55,12 @@ To see what you can customize have a look at the [Customization](#customization)
 
 ## Dependencies
 * [Eureka] 2.x
-* [CLTokenInputView] which is a token view pod 
+* [CLTokenInputView] which is a token view pod
 
 ## Requirements
 
 * iOS 8.0+
-* Xcode 8+
+* Xcode 8.3+
 
 ## Getting involved
 
@@ -116,7 +116,7 @@ final class User {
     var id: Int = 0
     var name: String = ""
     var avatar: String?
-	
+
 	// conform to Hashable
     var hashValue: Int {
         return id
@@ -149,7 +149,7 @@ Many things of this row are very similar to the [SuggestionRow] and the [GoogleP
 
 ### General customization
 
-There are several parts of the TokenRow that you can change. First of all, if you want to change the view that contains the tokens then you should have a look at [CLTokenInputView]. 
+There are several parts of the TokenRow that you can change. First of all, if you want to change the view that contains the tokens then you should have a look at [CLTokenInputView].
 
 A thing you must do for each of these rows is provide the options from which the user can choose a token. The conventional way is to specify an array of options to the `options` variable of the row:
 

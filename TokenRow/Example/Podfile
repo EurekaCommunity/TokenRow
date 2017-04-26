@@ -1,11 +1,12 @@
 source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
 
 use_frameworks!
 
 def pods
 	pod 'Alamofire', '~> 4.0'
-    pod 'AlamofireImage'
-    pod 'CLTokenInputView', '~> 2.0'
+  pod 'AlamofireImage' 
+  pod 'CLTokenInputView', '~> 2.3'
 	pod 'TokenRow', :path => '../../'
 end
 
