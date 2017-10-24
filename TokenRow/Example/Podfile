@@ -5,8 +5,8 @@ use_frameworks!
 
 def pods
 	pod 'Alamofire', '~> 4.0'
-  pod 'AlamofireImage' 
-  pod 'CLTokenInputView', '~> 2.3'
+	pod 'AlamofireImage'
+	pod 'CLTokenInputView', '~> 2.3'
 	pod 'TokenRow', :path => '../../'
 end
 
@@ -16,4 +16,14 @@ end
 
 target 'TokenRowTests' do
     pods
+end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == 'Eureka'
+            target.build_configurations.each do |config|
+                config.build_settings['SWIFT_VERSION'] = '4.0'
+            end
+        end
+    end
 end
