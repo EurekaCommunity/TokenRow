@@ -71,7 +71,7 @@ class ViewController: FormViewController {
         timer = nil
     }
 
-    func timerFired(_ timer: Timer) {
+    @objc func timerFired(_ timer: Timer) {
         if let dict = (timer.userInfo as? Dictionary<String, AnyObject>),
             let text = dict["text"] as? String,
             let row = dict["row"] as? TokenTableRow<User> {

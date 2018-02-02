@@ -22,7 +22,7 @@ public protocol EurekaTokenCollectionViewCell {
 /**
     Cell that is used in a TokenTableRow. shows a UITableView with options. Generic parameters are: Value of Row and Type of the Cell to be shown in the UITableView that shows the options
  */
-open class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UICollectionViewCell>: TokenCell<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CollectionViewCell: EurekaTokenCollectionViewCell, CollectionViewCell.T == T {
+open class CollectionTokenCell<T, CollectionViewCell: UICollectionViewCell>: TokenCell<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CollectionViewCell: EurekaTokenCollectionViewCell, CollectionViewCell.T == T {
 
     /// callback that can be used to cuustomize the appearance of the UICollectionViewCell in the inputAccessoryView
     public var customizeCollectionViewCell: ((T, CollectionViewCell) -> Void)?
@@ -63,7 +63,7 @@ open class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UICollect
         collectionView?.reloadData()
     }
 
-    open func tokenInputView(_ aView: CLTokenInputView, didChangeText text: String?) {
+    @objc open func tokenInputView(_ aView: CLTokenInputView, didChangeText text: String?) {
         if let text = text , !text.isEmpty {
             if let newTokens = (row as! _TokenRow<T, CollectionTokenCell<T, CollectionViewCell>>).getTokensForString(text) {
                 filteredTokens = newTokens
@@ -96,7 +96,7 @@ open class CollectionTokenCell<T: TokenSearchable, CollectionViewCell: UICollect
         if filteredTokens.count > (indexPath as NSIndexPath).row {
             let token = filteredTokens[(indexPath as NSIndexPath).row]
             (row as! _TokenRow<T, CollectionTokenCell>).addToken(token)
-            cellResignFirstResponder()
+            _ = cellResignFirstResponder()
         }
     }
 

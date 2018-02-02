@@ -20,7 +20,7 @@ public protocol TokenSearchable: Hashable {
 }
 
 /// Generic TokenRow. Concrete classes should subclass this one and specify generic parameters
-open class _TokenRow<T: TokenSearchable, Cell: BaseCell> : Row<Cell> where Cell: CellType, Cell: TokenCellProtocol, Cell: TypedCellType, Cell.Value == Set<T> {
+open class _TokenRow<T: TokenSearchable, Cell: BaseCell> : Row<Cell> where Cell: CellType, Cell: TokenCellProtocol, Cell.Value == Set<T> {
     public var options: [T] = []
     public var placeholder: String?
 
