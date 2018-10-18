@@ -1,10 +1,8 @@
 # TokenRow
 
 <p align="left">
-<!-- <a href="https://travis-ci.org/EurekaCommunity/TokenRow"><img src="https://travis-ci.org/EurekaCommunity/TokenRow.svg?branch=master" alt="Build status" /></a> -->
 <img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift3-compatible-4BC51D.svg?style=flat" alt="Swift 2 compatible" /></a>
-<!--<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible" /></a>-->
+<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift3-compatible-4BC51D.svg?style=flat" alt="Swift 4 compatible" /></a>
 <a href="https://cocoapods.org/pods/TokenRow"><img src="https://img.shields.io/cocoapods/v/TokenRow.svg" alt="CocoaPods compatible" /></a>
 <a href="https://raw.githubusercontent.com/EurekaCommunity/TokenRow/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
 </p>
@@ -54,7 +52,7 @@ form +++ Section()
 To see what you can customize have a look at the [Customization](#customization) section.
 
 ## Dependencies
-* [Eureka] 2.x
+* [Eureka] 4.x
 * [CLTokenInputView] which is a token view pod
 
 ## Requirements
@@ -191,10 +189,10 @@ TokenAccessoryRow uses a generic `TokenCollectionCell` cell whose generic parame
 
 * If you want to change something about the **collectionView** (e.g. its height, backgroundColor) then you can also do that in the `cellSetup` method. Just edit anything on the `collectionView` variable of your cell.
 
-* If you want to **change the collection view cell of the inputAccessoryView** drastically then there is nothing easier than creating your own row (`MyTokenAccessoryRow`) with your own `MyCollectionViewCell`:
+* If you want to **change the collection view cell of the inputAccessoryView** drastically then there is nothing easier than creating your own row (`CustomAccessoryRow`) with your own `MyCollectionViewCell`:
 ```swift
-public final class MyTokenAccessoryRow: _TokenRow<TokenCollectionCell<MyCollectionViewCell>>, RowType {
-    required public init(tag: String?) {
+final class CustomAccessoryRow<T: TokenSearchable>: _TokenRow<T, CollectionTokenCell<T, MyCollectionViewCell<T>>>, RowType {
+    required init(tag: String?) {
         super.init(tag: tag)
     }
 }
@@ -209,14 +207,18 @@ TokenTableRow uses a generic `TokenTableCell` cell whose generic parameter is th
 
 * You can customize attributes of the `tableView` that is displayed with the options. You should do this in `cellSetup` and keep in mind that the frame of the tableView is reset each time the tableView is displayed.
 
-* If you want to change the cells of the options table view then there is nothing easier than creating your own row (`MyTokenAccessoryRow`) with your own `MyCollectionViewCell`:
+* If you want to change the cells of the options table view then there is nothing easier than creating your own row (`MyTokenTableRow`) with your own `MyTableViewCell`:
 ```swift
-public final class MyTokenAccessoryRow: _TokenRow<TokenCollectionCell<MyCollectionViewCell>>, RowType {
+final class MyTokenTableRow<T: TokenSearchable>: _TokenRow<T, TableTokenCell<T, MyTableViewCell<T>>>, RowType {
     required public init(tag: String?) {
         super.init(tag: tag)
     }
 }
+
 ```
+
+You could also change `TableTokenCell` for any class you want to represent the TokenRow cell.
+
 > Note: Make sure your cell conforms to `EurekaTokenTableViewCell`
 
 
