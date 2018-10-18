@@ -33,7 +33,7 @@ open class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate
     /// The options that matched the search string entered by the user
     public var filteredTokens: [T] = []
 
-    required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    required public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     

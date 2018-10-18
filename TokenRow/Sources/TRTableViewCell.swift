@@ -13,7 +13,7 @@ import Eureka
 open class TRTableViewCell<Token: TokenSearchable>: UITableViewCell, EurekaTokenTableViewCell {
     public typealias T = Token
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialize()
     }

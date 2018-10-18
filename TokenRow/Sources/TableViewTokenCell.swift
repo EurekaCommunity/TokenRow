@@ -31,7 +31,7 @@ open class TableTokenCell<T, TableViewCell: UITableViewCell>: TokenCell<T>, UITa
     /// Maximum number of options to be shown as candidates
     public var numberOfOptions: Int = 5
 
-    required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    required public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
 
