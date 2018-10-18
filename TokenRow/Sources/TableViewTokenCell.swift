@@ -102,7 +102,7 @@ open class TableTokenCell<T, TableViewCell: UITableViewCell>: TokenCell<T>, UITa
         if filteredTokens.count > (indexPath as NSIndexPath).row {
             let token = filteredTokens[(indexPath as NSIndexPath).row]
             (row as! _TokenRow<T, TableTokenCell>).addToken(token)
-            cellResignFirstResponder()
+            _ = cellResignFirstResponder()
         }
     }
 
