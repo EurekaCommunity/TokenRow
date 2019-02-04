@@ -1,7 +1,7 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode10
 env:
-  - DESTINATION="OS=10.0,name=iPhone 6s" SCHEME="Example" SDK=iphonesimulator10.0
+  - DESTINATION="OS=12.0,name=iPhone X" SCHEME="Example" SDK=iphonesimulator12.0
 
 before_install:
 - pod install --project-directory=TokenRow/Example

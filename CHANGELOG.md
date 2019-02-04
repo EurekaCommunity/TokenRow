@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to TokenRow will be documented in this file.
 
+### [1.4.0](https://github.com/EurekaCommunity/TokenRow/releases/tag/1.4.0)
+<!-- Released on 2019-02-04. -->
+
+* Migrated to Swift 4.2
+
 ### [1.3.0](https://github.com/EurekaCommunity/TokenRow/releases/tag/1.3.0)
 <!-- Released on 2018-02-01. -->
 
