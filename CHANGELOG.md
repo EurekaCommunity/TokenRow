@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to TokenRow will be documented in this file.
 
+### [1.5.0](https://github.com/EurekaCommunity/TokenRow/releases/tag/1.5.0)
+<!-- Released on 2019-04-23. -->
+
+* Migrated to Swift 5.0.
+* Changing the value of the row will now update the tokens correctly.
+
 ### [1.4.0](https://github.com/EurekaCommunity/TokenRow/releases/tag/1.4.0)
 <!-- Released on 2019-02-04. -->
 

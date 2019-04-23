@@ -2,7 +2,7 @@
 
 <p align="left">
 <img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift3-compatible-4BC51D.svg?style=flat" alt="Swift 4 compatible" /></a>
+<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift5-compatible-4BC51D.svg?style=flat" alt="Swift 4 compatible" /></a>
 <a href="https://cocoapods.org/pods/TokenRow"><img src="https://img.shields.io/cocoapods/v/TokenRow.svg" alt="CocoaPods compatible" /></a>
 <a href="https://raw.githubusercontent.com/EurekaCommunity/TokenRow/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
 </p>
@@ -52,13 +52,13 @@ form +++ Section()
 To see what you can customize have a look at the [Customization](#customization) section.
 
 ## Dependencies
-* [Eureka] 4.x
+* [Eureka] 5.x
 * [CLTokenInputView] which is a token view pod
 
 ## Requirements
 
-* iOS 8.0+
-* Xcode 8.3+
+* iOS 9.3+
+* Xcode 10.2+
 
 ## Getting involved
 

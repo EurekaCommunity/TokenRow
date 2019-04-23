@@ -74,6 +74,24 @@ open class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate
         // Not calling super on purpose as we do not want to use textlabel nor detailTextLabel
         tokenView.fieldName = row.title
         tokenView.placeholderText = tokenRow.placeholder
+
+        // check if row.value contains other tokens than tokenView
+        let valueIdentifiers = Set(row.value?.compactMap { $0.identifier } ?? [])
+        var valuesToAdd = valueIdentifiers
+        if Set(tokenView.allTokens.compactMap { $0.context }) != valueIdentifiers {
+            tokenView.allTokens.forEach { (token) in
+                if !valueIdentifiers.contains(token.context!) {
+                    tokenView.remove(token)
+                } else {
+                    valuesToAdd.remove(token.context!)
+                }
+            }
+            row.value?.forEach({ (tokenSearchable) in
+                if valuesToAdd.contains(tokenSearchable.identifier) {
+                    tokenView.add(tokenSearchable.getCLToken())
+                }
+            })
+        }
     }
 
     /**
@@ -94,21 +112,18 @@ open class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate
     /// Should reload the list of options
     open func reloadOptions() {}
 
-    open func tokenInputView(_ aView:CLTokenInputView, didAdd token:CLToken) {
+    open func tokenInputView(_ aView: CLTokenInputView, didAdd token: CLToken) {
         tokenRow.addToken(token.context!)
     }
 
-    open func tokenInputView(_ aView:CLTokenInputView, didRemove token:CLToken) {
+    open func tokenInputView(_ aView: CLTokenInputView, didRemove token: CLToken) {
         tokenRow.removeToken(token.context!)
     }
 
     open func tokenInputView(_ aView: CLTokenInputView, tokenForText text: String) -> CLToken? {
         if filteredTokens.count > 0 {
             let matchingToken = filteredTokens[0]
-            let match = CLToken()
-            match.displayText = matchingToken.displayString
-            match.context = matchingToken.identifier
-            return match
+            return matchingToken.getCLToken()
         }
         return nil
     }
