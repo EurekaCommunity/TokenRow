@@ -15,8 +15,8 @@ final class User: ResponseObjectSerializable, ResponseCollectionSerializable {
     var name: String = ""
     var avatar: String?
 
-    var hashValue: Int {
-        return id
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 
     required init?(response: HTTPURLResponse, representation: AnyObject) {

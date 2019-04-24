@@ -19,6 +19,17 @@ public protocol TokenSearchable: Hashable {
     var identifier: NSObject { get }
 }
 
+extension TokenSearchable {
+
+    func getCLToken() -> CLToken {
+        let token = CLToken()
+        token.displayText = displayString
+        token.context = identifier
+        return token
+    }
+
+}
+
 /// Generic TokenRow. Concrete classes should subclass this one and specify generic parameters
 open class _TokenRow<T: TokenSearchable, Cell: BaseCell> : Row<Cell> where Cell: CellType, Cell: TokenCellProtocol, Cell.Value == Set<T> {
     public var options: [T] = []
