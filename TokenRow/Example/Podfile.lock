@@ -3,10 +3,10 @@ PODS:
   - AlamofireImage (3.5.0):
     - Alamofire (~> 4.8)
   - CLTokenInputView (2.3.0)
-  - Eureka (5.2.1)
+  - Eureka (5.3.4)
   - TokenRow (1.5.0):
     - CLTokenInputView (~> 2.3)
-    - Eureka (~> 5.2.1)
+    - Eureka (~> 5.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
@@ -29,8 +29,8 @@ SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   AlamofireImage: 1aea346f4dda2f6c67622fa5a89fcbb80d79cc16
   CLTokenInputView: 9dc1ffb7c9d2d81787e69a63c75bd97b0b2d1e76
-  Eureka: c883105488e05bc65539f583246ecf9657cabbfe
-  TokenRow: fd0b9d886f3b8da251ed2a1d2044d51b29e24041
+  Eureka: 60cf058f86a8fb3ed26165ba5292b9850361b0a6
+  TokenRow: 235d04a24aab9c0ad5c43f667acc2b6afe8b4bdd
 
 PODFILE CHECKSUM: b33b4413c1b9b90c273b5339a9380d7063d0e826
 
