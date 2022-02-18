@@ -46,10 +46,12 @@ open class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate
     }
 
     open override var canBecomeFirstResponder: Bool {
+        if row.isDisabled { return false }
         return tokenView.canBecomeFirstResponder
     }
 
     open override func becomeFirstResponder() -> Bool {
+        if row.isDisabled { return false }
         return tokenView.becomeFirstResponder()
     }
 
@@ -92,6 +94,7 @@ open class TokenCell<T: TokenSearchable>: Cell<Set<T>>, CLTokenInputViewDelegate
                 }
             })
         }
+        tokenView.isUserInteractionEnabled = !row.isDisabled
     }
 
     /**

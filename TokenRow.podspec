@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.source_files = 'TokenRow/Sources/**/*.{swift}'
   s.ios.frameworks = 'UIKit', 'Foundation'
-  s.dependency 'Eureka', '~> 5.0'
+  s.dependency 'Eureka', '~> 5.3'
   s.dependency 'CLTokenInputView', '~> 2.3'
   s.swift_version = "5.0"
 end
