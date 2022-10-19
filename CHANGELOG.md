@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to TokenRow will be documented in this file.
 
+### [1.6.0](https://github.com/EurekaCommunity/TokenRow/releases/tag/1.6.0)
+<!-- Released on 2022-10-19. -->
+
+* Updates for Xcode 14.
+* Minimum iOS version pushed to 11.0.
+* Fix disabled setting (#27)
+
 ### [1.5.0](https://github.com/EurekaCommunity/TokenRow/releases/tag/1.5.0)
 <!-- Released on 2019-04-23. -->
 
